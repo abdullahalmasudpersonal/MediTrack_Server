@@ -39,8 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'apps.users',
-    "apps.doctors",
-    "apps.appointments"
+    'apps.doctors',
+    'apps.appointments',
 ]
 
 MIDDLEWARE = [
@@ -85,13 +85,32 @@ WSGI_APPLICATION = 'meditrack_backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'meditrack_db',
+        'NAME': 'railway',
         'USER': 'root',
-        'PASSWORD': 'Masud@.12345',
-        'HOST': 'localhost',
-        'PORT': '3306',
+        'PASSWORD': 'LWnxEfmXiyrViiRavfrikEgQWLjNQaDq',
+        'HOST': 'metro.proxy.rlwy.net',
+        'PORT': '42087',
     }
 }
+# mysql://root:LWnxEfmXiyrViiRavfrikEgQWLjNQaDq@metro.proxy.rlwy.net:42087/railway
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'meditrack_db',
+#         'USER': 'root',
+#         'PASSWORD': 'NtNqpDhUQSozAjncBACHJBJLAIgEiDqn',
+#         # 'PASSWORD': 'Masud@.12345', লোকাল পিসির 
+#         # mysql://root:NtNqpDhUQSozAjncBACHJBJLAIgEiDqn@interchange.proxy.rlwy.net:17598/railway
+#         # mysql://root:NtNqpDhUQSozAjncBACHJBJLAIgEiDqn@interchange.proxy.rlwy.net:17598/railway
+#         'HOST': 'interchange.proxy.rlwy.net',
+#         # 'HOST': 'localhost',
+#         # python manage.py makemigrations
+#         # python manage.py migrate
+#         # python manage.py runserver
+#         'PORT': '17598',
+#         'PORT': '3306',
+#     }
+# }
 
 
 # Password validation
