@@ -11,10 +11,10 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
-
+import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
+TEMPLATE_DIR = os.path.join(BASE_DIR,"templates")
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
@@ -58,7 +58,7 @@ ROOT_URLCONF = 'meditrack_backend.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [TEMPLATE_DIR],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -92,26 +92,6 @@ DATABASES = {
         'PORT': '42087',
     }
 }
-# mysql://root:LWnxEfmXiyrViiRavfrikEgQWLjNQaDq@metro.proxy.rlwy.net:42087/railway
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'meditrack_db',
-#         'USER': 'root',
-#         'PASSWORD': 'NtNqpDhUQSozAjncBACHJBJLAIgEiDqn',
-#         # 'PASSWORD': 'Masud@.12345', লোকাল পিসির 
-#         # mysql://root:NtNqpDhUQSozAjncBACHJBJLAIgEiDqn@interchange.proxy.rlwy.net:17598/railway
-#         # mysql://root:NtNqpDhUQSozAjncBACHJBJLAIgEiDqn@interchange.proxy.rlwy.net:17598/railway
-#         'HOST': 'interchange.proxy.rlwy.net',
-#         # 'HOST': 'localhost',
-#         # python manage.py makemigrations
-#         # python manage.py migrate
-#         # python manage.py runserver
-#         'PORT': '17598',
-#         'PORT': '3306',
-#     }
-# }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
