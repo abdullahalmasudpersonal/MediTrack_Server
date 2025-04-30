@@ -22,12 +22,14 @@ from rest_framework.routers import DefaultRouter
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api-auth/', include('rest_framework.urls')),
-    path('users/',include('apps.users.urls'))
+    
+     path('api/', include('meditrack_backend.api.urls')), 
+    # path('api-auth/', include('rest_framework.urls')),
+    # path('users/',include('apps.users.urls'))
     # path('users/', views.allUser),
     # path('users/<int:pk>', views.singleUser),
      
-    # path('',include('apps.users.urls')),
+    #  path('',include('apps.users.urls')),
     # path('doctors/',include('apps.doctors.urls')),
     # path('appointments/',include('apps.appointments.urls')),
 ]
