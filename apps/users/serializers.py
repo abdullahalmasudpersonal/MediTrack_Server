@@ -20,9 +20,6 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 
-
-
-
 # class UserSerializer(serializers.Serializer):
 #     STATUS_CHOICES = [
 #         ('active', 'Active'),
