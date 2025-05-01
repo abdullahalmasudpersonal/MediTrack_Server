@@ -28,6 +28,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+# AUTH_USER_MODEL = 'custom_auth.User'
+
+
 
 # Application definition
 
@@ -43,7 +46,25 @@ INSTALLED_APPS = [
     'apps.users',
     'apps.doctors',
     'apps.appointments',
+    'apps.custom_auth',
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    )
+}
+
+from datetime import timedelta
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=15),     # ✅ 15 মিনিট (তুমি ইচ্ছেমতো বাড়াতে পারো)
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),         # ✅ ৭ দিন পর্যন্ত রিফ্রেশ টোকেন কার্যকর থাকবে
+    'ROTATE_REFRESH_TOKENS': False,
+    'BLACKLIST_AFTER_ROTATION': True,
+    'AUTH_HEADER_TYPES': ('Bearer',),
+}
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
