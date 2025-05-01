@@ -4,10 +4,16 @@ from rest_framework import status
 from django.contrib.auth.hashers import check_password
 from apps.users.models import User 
 from apps.users.serializers import UserSerializer
+from .serializers import UserLimitedSerializer
 from rest_framework_simplejwt.tokens import RefreshToken 
-
+    
 def get_tokens_for_user(user):
     refresh = RefreshToken.for_user(user)
+
+    # Add custom claims
+    refresh['email'] = user.email
+    refresh['role'] = user.role
+
     return {
         'refresh': str(refresh),
         'access': str(refresh.access_token),
@@ -30,6 +36,7 @@ def login_view(request):
         return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
 
     # Success
-    serializer = UserSerializer(user)
+    serializer = UserLimitedSerializer(user)
+    # serializer = UserSerializer(user)
     tokens = get_tokens_for_user(user)
-    return Response({'message': 'Login successful', 'tokens': tokens}, status=status.HTTP_200_OK)
+    return Response({'message': 'Login successful',"user":serializer.data, 'tokens': tokens}, status=status.HTTP_200_OK)
