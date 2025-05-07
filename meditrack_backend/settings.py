@@ -26,7 +26,8 @@ SECRET_KEY = 'django-insecure-!+kv7wo!-qrsm6(-q-b*d_-qw(rm6clo=!#5rg=ac4jrlljnwu
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['meditrack-backend-tdg6.onrender.com', 'localhost', '127.0.0.1']
+
 
 # AUTH_USER_MODEL = 'custom_auth.User'
 
