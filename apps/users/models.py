@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.hashers import make_password
+import uuid
 
 class User(models.Model):
     class Meta:
@@ -17,6 +18,7 @@ class User(models.Model):
         ('patient','Patient')
     ]
 
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)  
     userId = models.CharField(max_length=10, unique=True)
     email = models.EmailField(max_length=30, unique=True)  
     password = models.CharField(max_length=128)

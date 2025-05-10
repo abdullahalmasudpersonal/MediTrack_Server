@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     
     'apps.users',
     'apps.doctors',
+    'apps.patients',
     'apps.appointments',
     'apps.custom_auth',
 ]
