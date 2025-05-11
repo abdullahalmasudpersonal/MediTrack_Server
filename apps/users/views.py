@@ -3,6 +3,9 @@ from rest_framework.response import Response
 from .models import User
 from .serializers import UserSerializer
 from rest_framework import status
+from django.db import transaction
+from apps.patients.serializers import PatientSerializer
+from apps.patients.models import Patient
 
 # Create your views here.
 @api_view(['GET'])
@@ -20,14 +23,43 @@ def singleUser(request, pk):
     serializer = UserSerializer(user)
     return Response(serializer.data)
 
-@api_view(['POST'])
-def createUser(request):
-    serializer = UserSerializer(data=request.data)
-    if serializer.is_valid():
-        serializer.save()  # Password will be hashed via model's save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+def generate_user_id(prefix='P-MT', length=6):
+    last_id = Patient.objects.count() + 1
+    return f"{prefix}{str(last_id).zfill(length)}"
 
+@api_view(['POST'])
+def createPatient(request):
+    try:
+       with transaction.atomic(): 
+            # Step 1: Extract patient info
+            # patient_data = {
+            #     'name': request.data.get('name'),
+            # }
+            
+            patient_serializer = PatientSerializer(data={**request.data,'userId': generate_user_id()})
+            # patient_serializer = PatientSerializer(data=patient_data)
+            patient_serializer.is_valid(raise_exception=True)
+            patient_serializer.save()
+            
+            # Step 2: Create user entry
+            user_data = {
+                'userId': patient_serializer.data["userId"],
+                'email': patient_serializer.data['email'],
+                'password': request.data.get('password'),
+                'role': 'patient',
+            }
+            
+            user_serializer = UserSerializer(data=user_data)
+            user_serializer.is_valid(raise_exception=True)
+            user_serializer.save()
+            
+            return Response({
+            'patient': patient_serializer.data,
+            'user': user_serializer.data
+            }, status=status.HTTP_201_CREATED)
+
+    except Exception as e:
+        return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 
 
