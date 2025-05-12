@@ -34,7 +34,12 @@ class Doctor(models.Model):
     ('ophthalmology', 'Ophthalmology'),
     ('anesthesiology', 'Anesthesiology'),
     ]
-
+ 
+    CONSULTATION_TYPE = [
+        ('online', 'Online'), 
+        ('offline', 'Offline'), 
+        ('video', 'Video Call')
+    ]
         
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)    
     userId = models.CharField(max_length=10, unique=True)
@@ -49,7 +54,7 @@ class Doctor(models.Model):
     experience_years = models.PositiveIntegerField()
     hospital_affiliation = models.CharField(max_length=100, blank=True, null=True)
     availability = models.JSONField(blank=True, null=True)  # Example: {"monday": "10am-5pm"}
-    consultation_type = models.CharField(max_length=50, choices=(('online', 'Online'), ('offline', 'Offline'), ('video', 'Video Call')), default='offline')
+    consultation_type = models.CharField(max_length=50, choices=CONSULTATION_TYPE, default='offline')
     fees = models.DecimalField(max_digits=8, decimal_places=2, default=0.0)
     doctorPhonto = models.ImageField(upload_to='doctor_profiles/', blank=True, null=True) 
     bio = models.TextField(blank=True, null=True)
