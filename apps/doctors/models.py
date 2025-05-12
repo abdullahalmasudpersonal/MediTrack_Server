@@ -47,7 +47,7 @@ class Doctor(models.Model):
     email = models.EmailField(max_length=30, unique=True)  
     phone_number = models.CharField(validators=[phone_regex], max_length=11, blank=False,null=False)  
     gender = models.CharField(max_length=30, choices=GENDER_CHOICES)
-    birthDate = models.DateField(blank=False, null=False)
+    birthDate = models.DateField(blank=True, null=True)
     specialization = models.CharField(max_length=30, choices=SPECIALIZATION_CHOICES)
     license_number = models.CharField(max_length=50, unique=True)
     education = models.TextField(blank=True, null=True)
