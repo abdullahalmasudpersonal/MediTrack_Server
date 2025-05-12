@@ -5,7 +5,7 @@ from .serializers import UserSerializer
 from rest_framework import status
 from django.db import transaction
 from apps.patients.serializers import PatientSerializer
-from apps.patients.models import Patient
+from apps.patients.utils import generate_user_id
 
 # Create your views here.
 @api_view(['GET'])
@@ -22,10 +22,6 @@ def singleUser(request, pk):
         return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
     serializer = UserSerializer(user)
     return Response(serializer.data)
-
-def generate_user_id(prefix='P-MT', length=6):
-    last_id = Patient.objects.count() + 1
-    return f"{prefix}{str(last_id).zfill(length)}"
 
 @api_view(['POST'])
 def createPatient(request):
@@ -61,7 +57,13 @@ def createPatient(request):
     except Exception as e:
         return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
-
+# @api_view(['POST'])
+# def createDoctor(request):
+#     try:
+#         with transaction.atomic():
+    
+#     except Exception as e:
+#         return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 
 
