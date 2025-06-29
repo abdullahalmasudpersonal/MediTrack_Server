@@ -50,8 +50,8 @@ class Doctor(models.Model):
     birthDate = models.DateField(blank=True, null=True)
     specialization = models.CharField(max_length=30, choices=SPECIALIZATION_CHOICES)
     license_number = models.CharField(max_length=50, unique=True)
-    education = models.TextField(blank=True, null=True)
-    experience_years = models.PositiveIntegerField()
+    education = models.TextField(blank=True, null=True,max_length=80)
+    experience_years = models.PositiveIntegerField(blank=True, null=True )
     hospital_affiliation = models.CharField(max_length=100, blank=True, null=True)
     availability = models.JSONField(blank=True, null=True)  # Example: {"monday": "10am-5pm"}
     consultation_type = models.CharField(max_length=50, choices=CONSULTATION_TYPE, default='offline')

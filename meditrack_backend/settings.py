@@ -63,8 +63,8 @@ REST_FRAMEWORK = {
 from datetime import timedelta
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=15),     # ✅ 15 মিনিট (তুমি ইচ্ছেমতো বাড়াতে পারো)
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),         # ✅ ৭ দিন পর্যন্ত রিফ্রেশ টোকেন কার্যকর থাকবে
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=100),     # ✅ 15 মিনিট (তুমি ইচ্ছেমতো বাড়াতে পারো)
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=300),         # ✅ ৭ দিন পর্যন্ত রিফ্রেশ টোকেন কার্যকর থাকবে
     'ROTATE_REFRESH_TOKENS': False,
     'BLACKLIST_AFTER_ROTATION': True,
     'AUTH_HEADER_TYPES': ('Bearer',),
@@ -90,6 +90,8 @@ CORS_ALLOWED_ORIGINS = [
 
 
 ROOT_URLCONF = 'meditrack_backend.urls'
+
+# LOGIN_URL = '/login/'
 
 TEMPLATES = [
     {
