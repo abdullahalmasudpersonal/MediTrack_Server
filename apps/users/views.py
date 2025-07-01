@@ -10,38 +10,17 @@ from apps.patients.serializers import PatientSerializer
 from apps.admins.utils import generate_admin_id
 from apps.doctors.utils import generate_doctor_id
 from apps.patients.utils import generate_patient_id
-from apps.core.middleware.decorators import role_required
-import jwt
-from django.conf import settings
+from apps.core.middleware.customAuthGird import custom_auth_gird
 
 # Create your views here.
-# @login_required
-# @role_required('admin', 'doctor','patient')
 @api_view(['GET'])
+@custom_auth_gird(allowed_roles=['admin','doctor'])
+# def custom_auth_gird(allowed_roles=None):  # ✅ Best Practice
+# def custom_auth_gird(allowed_roles=[]):  # ❌ এটা কখনো করো না!
 def allUser(request):
-    
-    # print("see request result",request.META.get('HTTP_AUTHORIZATION'))
-    token = request.headers.get('Authorization')
-    if not token:
-        return Response({'detail': 'Authorization header missing'}, status=status.HTTP_401_UNAUTHORIZED)
-    
-    try:
-        decoded = jwt.decode(token, settings.SECRET_KEY, algorithms=["HS256"])
-        existEmail = decoded.get('email')
-        user = User.objects.get(email=existEmail)
-        if user.role != 'admin':
-         return Response({'detail': 'You are not authorized to view this data.'}, status=status.HTTP_403_FORBIDDEN)
-     
-        users = User.objects.filter(is_deleted=False)
-        serializer = UserSerializer(users, many=True)
-        return Response(serializer.data)
-    
-    except jwt.ExpiredSignatureError:
-        return Response({'detail': 'Token has expired'}, status=status.HTTP_401_UNAUTHORIZED)
-    except jwt.InvalidTokenError:
-        return Response({'detail': 'Invalid token'}, status=status.HTTP_401_UNAUTHORIZED)
-    except Exception as e:
-        return Response({'detail': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    users = User.objects.filter(is_deleted=False)
+    serializer = UserSerializer(users, many=True)
+    return Response(serializer.data)
 
 @api_view(['GET'])
 def singleUser(request, pk):

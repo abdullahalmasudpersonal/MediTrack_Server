@@ -122,27 +122,27 @@ WSGI_APPLICATION = 'meditrack_backend.wsgi.application'
 # }
 
 #  railway Database
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'railway',
-#         'USER': 'root',
-#         'PASSWORD': 'LWnxEfmXiyrViiRavfrikEgQWLjNQaDq',
-#         'HOST': 'metro.proxy.rlwy.net',
-#         'PORT': '42087',
-#     }
-# }
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'railway',
         'USER': 'root',
-        'PASSWORD': 'BgFktvZZTWCvnSFTcpwuodLAbOEFfbng',
-        'HOST': 'trolley.proxy.rlwy.net',
-        'PORT': '11204',
+        'PASSWORD': 'LWnxEfmXiyrViiRavfrikEgQWLjNQaDq',
+        'HOST': 'metro.proxy.rlwy.net',
+        'PORT': '42087',
     }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'railway',
+#         'USER': 'root',
+#         'PASSWORD': 'BgFktvZZTWCvnSFTcpwuodLAbOEFfbng',
+#         'HOST': 'trolley.proxy.rlwy.net',
+#         'PORT': '11204',
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
