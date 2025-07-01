@@ -11,6 +11,13 @@ from apps.admins.utils import generate_admin_id
 from apps.doctors.utils import generate_doctor_id
 from apps.patients.utils import generate_patient_id
 from apps.core.middleware.customAuthGird import custom_auth_gird
+from apps.doctors.models import Doctor
+
+@api_view(['GET'])
+def pinkAllDoctor(request):
+    users = Doctor.objects.filter()
+    serializer = DoctorSerializer(users, many=True)
+    return Response(serializer.data)
 
 # Create your views here.
 @api_view(['GET'])
