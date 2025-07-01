@@ -12,6 +12,8 @@ from apps.doctors.utils import generate_doctor_id
 from apps.patients.utils import generate_patient_id
 from apps.core.middleware.customAuthGird import custom_auth_gird
 from apps.doctors.models import Doctor
+from apps.admins.models import Admin
+from apps.patients.models import Patient
 
 @api_view(['GET'])
 def pinkAllDoctor(request):
@@ -21,7 +23,7 @@ def pinkAllDoctor(request):
 
 # Create your views here.
 @api_view(['GET'])
-@custom_auth_gird(allowed_roles=['admin','doctor'])
+@custom_auth_gird(allowed_roles=['admin'])
 # def custom_auth_gird(allowed_roles=None):  # ✅ Best Practice
 # def custom_auth_gird(allowed_roles=[]):  # ❌ এটা কখনো করো না!
 def allUser(request):
@@ -126,17 +128,31 @@ def createAdmin(request):
     except Exception as e:
         return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
-# @role_required('ADMIN', 'SELLER', 'BUYER', 'SUPER_ADMIN')
-# @api_view(['GET'])
-# def getMyProfile(request):
-#     users = User.objects.filter(is_deleted=False)
-
-
-
-
-
-
-
+@api_view(['GET'])
+@custom_auth_gird(allowed_roles=['admin','doctor','patient'])
+def getMyProfileData(request):
+    role = request.user.role
+    email = request.user.email
+    
+    profile = None
+    serializer = None
+    
+    try:
+        if role == 'admin':
+            profile = Admin.objects.get(email=email)
+            serializer = AdminSerializer(profile)
+        elif role == 'doctor':
+            profile = Doctor.objects.get(email=email)
+            serializer = DoctorSerializer(profile)
+        elif role == 'patient':
+            profile = Patient.objects.get(email=email)
+            serializer = PatientSerializer(profile)
+        else:
+            return Response({'detail': 'Unsupported role'}, status=status.HTTP_400_BAD_REQUEST)            
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    except Exception as e:
+        return Response({'detail': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)    
 
 
 
@@ -173,5 +189,3 @@ def createAdmin(request):
 #     return render(request,"users.html", context=context)
     #  return HttpResponse("Welcome to MediTrack users ")
 
-# def user(request):
-#     return HttpResponse("Welcome to MediTrack Backend user"),

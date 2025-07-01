@@ -8,4 +8,5 @@ urlpatterns = [
     path('create_admin/',views.createAdmin), 
     path('create_doctor/',views.createDoctor), 
     path('create_patient/',views.createPatient), 
+    path('my-profile-data/', views.getMyProfileData)
 ]

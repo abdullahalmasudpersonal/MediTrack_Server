@@ -18,12 +18,14 @@ def custom_auth_gird(allowed_roles=None):
     
             try:
                 decoded = jwt.decode(token, settings.SECRET_KEY, algorithms=["HS256"])
-                existEmail = decoded.get('email')
-                if not existEmail:
+                email = decoded.get('email')
+                if not email:
                     return Response({'detail': 'Email not found in token'}, status=status.HTTP_401_UNAUTHORIZED)
-                user = User.objects.get(email=existEmail)
+                user = User.objects.get(email=email)
                 if allowed_roles and user.role not in allowed_roles:
                     return Response({'detail': 'You are not authorized to view this data.'}, status=status.HTTP_403_FORBIDDEN)
+                
+                request.user = user
                 
                 return view_func(request, *args, **kwargs)
     
