@@ -154,7 +154,33 @@ def getMyProfileData(request):
     except Exception as e:
         return Response({'detail': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)    
 
-
+@api_view(['PATCH'])
+@custom_auth_gird(allowed_roles=['admin','doctor','patient'])
+def updateMyProfileData(request):
+    role = request.user.role
+    email = request.user.email
+    
+    try:
+        if role == 'admin':
+            profile = Admin.objects.get(email=email)
+            serializer = AdminSerializer(profile, data=request.data, partial=True)
+        elif role == 'doctor':
+            profile = Doctor.objects.get(email=email)
+            serializer = DoctorSerializer(profile, data=request.data, partial=True)
+        elif role == 'patient':
+            profile = Patient.objects.get(email=email)
+            serializer = PatientSerializer(profile, data=request.data, partial=True)
+        else:
+            return Response({'detail': 'Invalid role'}, status=400)
+        
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors, status=400)
+            
+    except Exception as e:
+        return Response({'detail': str(e)}, status=500)    
 
 # def allUser(request):
 #     # complex data
