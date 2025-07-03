@@ -1,6 +1,7 @@
 from django.db import models
 import uuid
 from django.core.validators import RegexValidator
+from apps.users.models import User
 
 # Create your models here.
 class Admin(models.Model):
@@ -13,9 +14,8 @@ class Admin(models.Model):
     )
         
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False) 
-    userId = models.CharField(max_length=10, unique=True)   
+    user =  models.OneToOneField(User,on_delete=models.CASCADE,related_name="admin_profile") 
     name = models.CharField(max_length=30)
-    email = models.EmailField(max_length=30, unique=True) 
     phone_number = models.CharField(validators=[phone_regex], max_length=11, blank=False,null=False) 
     address = models.TextField(blank=True, null=True)
     patientPhoto = models.ImageField(upload_to='patient_photos/', blank=True, null=True)

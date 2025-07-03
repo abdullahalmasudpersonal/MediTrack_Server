@@ -4,11 +4,13 @@ from .models import User
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = '__all__'
+        fields = ['id', 'userId', 'email', 'password', 'role', 'status', 'last_login', 'created_at']
         extra_kwargs = {
             'password': {'write_only': True}
         }
         read_only_fields = ['id', 'userId', 'email', 'role','created_at']
+        
+        
     # def create(self, validated_data):
     #     user = User(**validated_data)
     #     user.save()

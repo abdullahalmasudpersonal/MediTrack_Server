@@ -1,6 +1,7 @@
 from django.db import models
 import uuid
 from django.core.validators import RegexValidator
+from apps.users.models import User
 
 # Create your models here.
 class Doctor(models.Model):
@@ -41,10 +42,9 @@ class Doctor(models.Model):
         ('video', 'Video Call')
     ]
         
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)    
-    userId = models.CharField(max_length=10, unique=True)
-    name = models.CharField(max_length=30)
-    email = models.EmailField(max_length=30, unique=True)  
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False) 
+    user =  models.OneToOneField(User,on_delete=models.CASCADE,related_name="doctor_profile")  
+    name = models.CharField(max_length=30) 
     phone_number = models.CharField(validators=[phone_regex], max_length=11, blank=False,null=False)  
     gender = models.CharField(max_length=30, choices=GENDER_CHOICES)
     birthDate = models.DateField(blank=True, null=True)

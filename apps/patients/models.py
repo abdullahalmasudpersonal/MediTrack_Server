@@ -1,6 +1,7 @@
 from django.db import models
 from django.core.validators import RegexValidator
 import uuid
+from apps.users.models import User
 
 # Create your models here.
 class Patient(models.Model):
@@ -14,8 +15,7 @@ class Patient(models.Model):
     )
     
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)    
-    userId = models.CharField(max_length=10, unique=True)
-    email = models.EmailField(max_length=30, unique=True)     
+    user =  models.OneToOneField(User,on_delete=models.CASCADE,related_name="patient_profile")    
     name = models.CharField(max_length=30)
     age = models.PositiveIntegerField(blank=True, null=True)
     birthDate = models.DateField(blank=False, null=False)

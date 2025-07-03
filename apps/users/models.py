@@ -28,6 +28,9 @@ class User(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     is_deleted = models.BooleanField(default=False)
     
+    def get_email_field_name(self):
+        return 'email'
+    
     def save(self, *args, **kwargs):
     # যদি password hash করা না থাকে তাহলে hash করে দাও
      if not self.password.startswith('pbkdf2_'):
