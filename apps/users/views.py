@@ -105,28 +105,58 @@ def createDoctor(request):
 def createAdmin(request):
     try:
         with transaction.atomic():
-            admin_serializer = AdminSerializer(data={**request.data,'userId':generate_admin_id()})
-            admin_serializer.is_valid(raise_exception=True)
-            admin_serializer.save()
+            user_data ={
+                'email': request.data.get('email'),
+                'password': request.data.get('password'),
+                'role': 'admin',
+            }
+            user_serializer = UserSerializer(data=user_data)
+            user_serializer.is_valid(raise_exception=True)
+            user = user_serializer.save()
+            user.userId = generate_admin_id()
+            user.save()
             
-        user_data = {
-            'userId':admin_serializer.data['userId'],
-            'email':admin_serializer.data['email'],
-            'password': request.data.get('password'),
-            'role': 'admin',
-            }   
-
-        user_serializer = UserSerializer(data=user_data)
-        user_serializer.is_valid(raise_exception=True)
-        user_serializer.save()
+            admin_data = {
+                'name': request.data.get('name'),
+                'phone_number': request.data.get('phone_number'),
+                'address': request.data.get('address'),
+                'patientPhoto': request.data.get('patientPhoto',None),
+            }
+            
+            admin_serializer = AdminSerializer(data=admin_data)
+            admin_serializer.is_valid(raise_exception=True)
+            admin_serializer.save(user=user)
         
         return Response({
-        'admin': admin_serializer.data,
-        'user': user_serializer.data
-        }, status=status.HTTP_201_CREATED)    
-    
+            "admin": admin_serializer.data
+        }, status=status.HTTP_201_CREATED)
+            
     except Exception as e:
-        return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)    
+    # try:
+    #     with transaction.atomic():
+    #         admin_serializer = AdminSerializer(data={**request.data,'userId':generate_admin_id()})
+    #         admin_serializer.is_valid(raise_exception=True)
+    #         admin_serializer.save()
+            
+    #     user_data = {
+    #         'userId':admin_serializer.data['userId'],
+    #         'email':admin_serializer.data['email'],
+    #         'password': request.data.get('password'),
+    #         'role': 'admin',
+    #         }   
+
+    #     user_serializer = UserSerializer(data=user_data)
+    #     user_serializer.is_valid(raise_exception=True)
+    #     user_serializer.save()
+        
+    #     return Response({
+    #     'admin': admin_serializer.data,
+    #     'user': user_serializer.data
+    #     }, status=status.HTTP_201_CREATED)    
+    
+    # except Exception as e:
+    #     return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
 @custom_auth_gird(allowed_roles=['admin','doctor','patient'])
