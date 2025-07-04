@@ -18,5 +18,5 @@ class Admin(models.Model):
     name = models.CharField(max_length=30)
     phone_number = models.CharField(validators=[phone_regex], max_length=11, blank=False,null=False) 
     address = models.TextField(blank=True, null=True)
-    patientPhoto = models.ImageField(upload_to='patient_photos/', blank=True, null=True)
+    admin_photo = models.ImageField(upload_to='admin_photo/', blank=True, null=True)
     updated_at = models.DateTimeField(auto_now=True) 

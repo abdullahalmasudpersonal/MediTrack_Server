@@ -19,7 +19,7 @@ class Patient(models.Model):
     name = models.CharField(max_length=30)
     age = models.PositiveIntegerField(blank=True, null=True)
     birthDate = models.DateField(blank=False, null=False)
-    patientPhoto = models.ImageField(upload_to='patient_photos/', blank=True, null=True)
+    patient_photo = models.ImageField(upload_to='patient_photo/', blank=True, null=True)
     phone_number = models.CharField(validators=[phone_regex], max_length=11, blank=False,null=False)
     address = models.CharField(max_length=50)
     updated_at = models.DateTimeField(auto_now=True)    

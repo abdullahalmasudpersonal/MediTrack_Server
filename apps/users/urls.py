@@ -7,7 +7,7 @@ urlpatterns = [
     path('<int:pk>/',views.singleUser),
     path('create_admin/',views.createAdmin), 
     path('create_doctor/',views.createDoctor), 
-    path('create_patient/',views.createPatient), 
-    path('my-profile-data/', views.getMyProfileData),
-    path('update-profile-data/', views.updateMyProfileData),
+    # path('create_patient/',views.createPatient), 
+    # path('my-profile-data/', views.getMyProfileData),
+    # path('update-profile-data/', views.updateMyProfileData),
 ]

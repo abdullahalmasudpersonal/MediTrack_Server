@@ -6,5 +6,7 @@ class DoctorSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)
     class Meta:
         model = Doctor
-        fields = '__all__'
+        fields = ['id','user','name','phone_number','gender', 'birthDate','specialization','license_number','education','experience_years','hospital_affiliation','availability','consultation_type','fees','doctor_photo','bio','address','updated_at']
+        
         read_only_fields = ['id', 'user']
+        
