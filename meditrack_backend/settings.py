@@ -49,9 +49,9 @@ INSTALLED_APPS = [
     'apps.users',
     'apps.admins',
     'apps.doctors',
-    # 'apps.patients',
+    'apps.patients',
     # 'apps.appointments',
-    # 'apps.custom_auth',
+    'apps.custom_auth',
 ]
 
 REST_FRAMEWORK = {

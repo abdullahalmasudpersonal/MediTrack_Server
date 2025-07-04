@@ -36,9 +36,7 @@ def login_view(request):
     if not check_password(password, user.password):
         return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
 
-    # Success
     serializer = UserLimitedSerializer(user)
-    # serializer = UserSerializer(user)
     tokens = get_tokens_for_user(user)
     return Response({'message': 'Login successful',"user":serializer.data, 'tokens': tokens}, status=status.HTTP_200_OK)
 
