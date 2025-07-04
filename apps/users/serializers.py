@@ -21,20 +21,20 @@ class UserSerializer(serializers.ModelSerializer):
         }
         read_only_fields = ['id', 'userId', 'created_at']
         
-    def get_admin_profile(self, obj):
-        from apps.admins.serializers import AdminSerializer
-        if hasattr(obj, 'admin_profile'):
-            return AdminSerializer(obj.admin_profile).data
-        return None
+    # def get_admin_profile(self, obj):
+    #     from apps.admins.serializers import AdminSerializer
+    #     if hasattr(obj, 'admin_profile'):
+    #         return AdminSerializer(obj.admin_profile).data
+    #     return None
 
-    def get_doctor_profile(self, obj):
-        from apps.doctors.serializers import DoctorSerializer
-        if hasattr(obj, 'doctor_profile'):
-            return DoctorSerializer(obj.doctor_profile).data
-        return None
+    # def get_doctor_profile(self, obj):
+    #     from apps.doctors.serializers import DoctorSerializer
+    #     if hasattr(obj, 'doctor_profile'):
+    #         return DoctorSerializer(obj.doctor_profile).data
+    #     return None
 
-    def get_patient_profile(self, obj):
-        from apps.patients.serializers import PatientSerializer
-        if hasattr(obj, 'patient_profile'):
-            return PatientSerializer(obj.patient_profile).data
-        return None
+    # def get_patient_profile(self, obj):
+    #     from apps.patients.serializers import PatientSerializer
+    #     if hasattr(obj, 'patient_profile'):
+    #         return PatientSerializer(obj.patient_profile).data
+    #     return None
