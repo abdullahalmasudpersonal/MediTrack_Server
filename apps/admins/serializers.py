@@ -6,5 +6,6 @@ class AdminSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)    
     class Meta:
         model = Admin
+        # exclude = ['user']
         fields = '__all__'
         read_only_fields = ['id', 'user',]
