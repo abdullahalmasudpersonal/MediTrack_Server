@@ -14,10 +14,8 @@ def getAllPatient(request):
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 @api_view(['GET'])
-# @custom_auth_gird(allowed_roles=['admin'])
+@custom_auth_gird(allowed_roles=['admin'])
 def getSinglePatient(request,pk):
     doctors = Patient.objects.filter(user_id=pk)
     serializer = PatientSerializer(doctors, many=True)
-    print(pk,'doctors',serializer.data)
     return Response(serializer.data, status=status.HTTP_200_OK)
-    # return Response('HTTP_200_OK')
