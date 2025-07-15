@@ -9,13 +9,13 @@ from apps.core.middleware.customAuthGird import custom_auth_gird
 @api_view(['GET'])
 @custom_auth_gird(allowed_roles=['admin'])
 def getAllPatient(request):
-    doctors = Patient.objects.all()
-    serializer = PatientSerializer(doctors, many=True)
+    patient = Patient.objects.filter(user__status='active',user__is_deleted=False)
+    serializer = PatientSerializer(patient, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 @api_view(['GET'])
 @custom_auth_gird(allowed_roles=['admin'])
 def getSinglePatient(request,pk):
-    doctors = Patient.objects.filter(user_id=pk)
-    serializer = PatientSerializer(doctors, many=True)
+    patient = Patient.objects.get(user_id=pk,user__status='active',user__is_deleted=False)
+    serializer = PatientSerializer(patient)
     return Response(serializer.data, status=status.HTTP_200_OK)

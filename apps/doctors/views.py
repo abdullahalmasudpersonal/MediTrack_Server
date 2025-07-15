@@ -7,16 +7,14 @@ from apps.core.middleware.customAuthGird import custom_auth_gird
 
 # Create your views here.
 @api_view(['GET'])
-# @custom_auth_gird(allowed_roles=['admin'])
 def getAllDoctor(request):
-     doctors = Doctor.objects.all()
+     doctors = Doctor.objects.filter(user__status='active',user__is_deleted=False)
      serializer = DoctorSerializer(doctors, many=True)
      return Response(serializer.data, status=status.HTTP_200_OK)
 
 @api_view(['GET'])
-# @custom_auth_gird(allowed_roles=['admin'])
 def getSingleDoctor(request,pk):
-     doctors = Doctor.objects.filter(user_id=pk)
-     serializer = DoctorSerializer(doctors, many=True)
+     doctors = Doctor.objects.get(user_id=pk,user__status='active',user__is_deleted=False)
+     serializer = DoctorSerializer(doctors)
      return Response(serializer.data, status=status.HTTP_200_OK)
 
