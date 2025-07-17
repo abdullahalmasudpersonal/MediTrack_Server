@@ -56,7 +56,7 @@ class Doctor(models.Model):
     availability = models.JSONField(blank=True, null=True)  # Example: {"monday": "10am-5pm"}
     consultation_type = models.CharField(max_length=20, choices=CONSULTATION_TYPE, default='offline')
     fees = models.DecimalField(max_digits=8, decimal_places=2, default=0.0)
-    photo = models.ImageField(upload_to='photo/', blank=True, null=True) 
+    photo = models.URLField(blank=True, null=True)
     bio = models.TextField(blank=True, null=True)
     address = models.CharField(max_length=50,blank=True, null=True)
     updated_at = models.DateTimeField(auto_now=True) 
