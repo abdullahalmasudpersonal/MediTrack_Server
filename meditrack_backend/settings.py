@@ -50,7 +50,7 @@ INSTALLED_APPS = [
     'apps.admins',
     'apps.doctors',
     'apps.patients',
-    # 'apps.appointments',
+    'apps.appointments',
     'apps.custom_auth',
 ]
 

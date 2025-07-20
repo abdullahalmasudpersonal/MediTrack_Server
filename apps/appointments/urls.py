@@ -1,5 +1,5 @@
 from django.urls import path
 from . import views
 urlpatterns = [
-    # path('',views.appointments ),
+    path('create-appointment/',views.create_appointment ),
 ]

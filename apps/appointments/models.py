@@ -7,6 +7,7 @@ from django.core.validators import RegexValidator
 class Appointment(models.Model):
     class Meta:
         db_table='appointments'
+        ordering = ['-created_at'] 
         
     GENDER_CHOICES = [
         ("male","Male"),
@@ -49,11 +50,6 @@ class Appointment(models.Model):
     ('paid', 'Paid'),
     ('refunded', 'Refunded'),
     ]
-    DEVICE_CHOICES = [
-    ('web', 'Web'),
-    ('android', 'Android'),
-    ('ios', 'iOS'),
-    ]
     
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     patient_name= models.CharField(max_length=30)
@@ -72,6 +68,5 @@ class Appointment(models.Model):
     reschedule_count = models.PositiveIntegerField(default=0)
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='created_appointments')
     updated_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='updated_appointments')
-    device_type = models.CharField(max_length=10, choices=DEVICE_CHOICES, default='web')
     created_at = models.DateTimeField(auto_now_add=True)
     is_active = models.BooleanField(default=True)
