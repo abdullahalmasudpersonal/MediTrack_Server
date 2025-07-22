@@ -8,7 +8,20 @@ from apps.core.middleware.customAuthGird import custom_auth_gird
 # Create your views here.
 @api_view(['GET'])
 def getAllDoctor(request):
-     doctors = Doctor.objects.filter(user__status='active',user__is_deleted=False)
+     specialization  = request.GET.get('specialization')
+     name = request.GET.get('name')
+     filters = {
+        'user__status': 'active',
+        'user__is_deleted': False,
+    }
+     if specialization:
+        filters['specialization__icontains'] = specialization
+
+     if name:
+        filters['name__icontains'] = name 
+        
+     doctors = Doctor.objects.filter(**filters)   
+     # doctors = Doctor.objects.filter(user__status='active',user__is_deleted=False)
      serializer = DoctorSerializer(doctors, many=True)
      return Response(serializer.data, status=status.HTTP_200_OK)
 
