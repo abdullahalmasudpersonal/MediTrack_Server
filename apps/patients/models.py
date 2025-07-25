@@ -7,7 +7,6 @@ from apps.users.models import User
 class Patient(models.Model):
     class Meta:
         db_table='patients'
-        # ordering = ['-created_at'] 
         
     phone_regex = RegexValidator(
     regex=r'^(\+8801|01)\d{9}$',
