@@ -7,6 +7,7 @@ from apps.users.models import User
 import uuid
 from .models import Appointment
 from .serializers import AppointmentSerializer
+from apps.core.middleware.customAuthGird import custom_auth_gird
 
 @api_view(['POST'])
 def create_appointment(request):
@@ -37,4 +38,24 @@ def create_appointment(request):
     except Exception as e: return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)  
     
     
-    
+@api_view(['GET'])
+@custom_auth_gird(allowed_roles=['admin'])
+def getAllappointment(request):
+    try:
+        appointments = Appointment.objects.all().order_by('-created_at')
+        serializer = AppointmentSerializer(appointments, many=True)
+        return Response( serializer.data, status=status.HTTP_200_OK)
+    except Exception as e:
+        return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+@custom_auth_gird(allowed_roles=['admin'])
+def getSingleAppointment(request,pk):
+    try:
+        appointment = Appointment.objects.get(id=pk)
+        serializer = AppointmentSerializer(appointment)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    except Appointment.DoesNotExist:
+        return Response({'error': 'Appointment not found'}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
