@@ -7,6 +7,9 @@ from apps.users.serializers import UserSerializer
 from .serializers import UserLimitedSerializer
 from rest_framework_simplejwt.tokens import RefreshToken 
 from apps.core.middleware.customAuthGird import custom_auth_gird
+from apps.doctors.models import Doctor
+from apps.admins.models import Admin
+from apps.patients.models import Patient
     
 def get_tokens_for_user(user):
     refresh = RefreshToken.for_user(user)
@@ -14,7 +17,24 @@ def get_tokens_for_user(user):
     # Add custom claims
     refresh['email'] = user.email
     refresh['role'] = user.role
+    
+   # Add profile_id based on role
+    try:
+        if user.role == 'admin':
+            profile = Admin.objects.get(user_id=user.id)
+        elif user.role == 'doctor':
+            profile = Doctor.objects.get(user_id=user.id)
+        elif user.role == 'patient':
+            profile = Patient.objects.get(user_id=user.id)
+        else:
+            profile = None
 
+        if profile:
+            refresh['profile_id'] = str(profile.id)
+    except Exception as e:
+        # Optional: log error or ignore silently
+        pass
+    
     return {
         'refresh': str(refresh),
         'access': str(refresh.access_token),
@@ -35,11 +55,11 @@ def login_view(request):
 
     if not check_password(password, user.password):
         return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
-
+    
     serializer = UserLimitedSerializer(user)
     tokens = get_tokens_for_user(user)
     return Response({'message': 'Login successful',"user":serializer.data, 'tokens': tokens}, status=status.HTTP_200_OK)
-
+    
 @api_view(['POST'])
 @custom_auth_gird(allowed_roles=['admin','doctor','patient'])
 def change_password(request):

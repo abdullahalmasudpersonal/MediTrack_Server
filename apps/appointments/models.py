@@ -1,5 +1,7 @@
 from django.db import models
 import uuid
+from apps.patients.models import Patient
+from apps.doctors.models import Doctor
 from apps.users.models import User
 from django.core.validators import RegexValidator
 
@@ -52,12 +54,13 @@ class Appointment(models.Model):
     ]
     
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    patient = models.ForeignKey(Patient,on_delete=models.CASCADE, null=True, blank=True,related_name="appointment_as_patient") 
     patient_name= models.CharField(max_length=30)
     email = models.EmailField(max_length=30) 
     gender = models.CharField(max_length=30, choices=GENDER_CHOICES)
     phone_number = models.CharField(validators=[phone_regex], max_length=14, blank=False,null=False) 
     appointment_number = models.CharField(max_length=100, unique=True, blank=True, null=True)
-    doctor = models.ForeignKey(User, on_delete=models.CASCADE, related_name="appointments")
+    doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE, related_name="appointment_as_doctor")
     specialization = models.CharField(max_length=30, choices=SPECIALIZATION_CHOICES)
     consultation_type = models.CharField(max_length=20, choices=CONSULTATION_TYPE, default='offline')
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
@@ -66,7 +69,7 @@ class Appointment(models.Model):
     appointment_time = models.TimeField()
     payment_status = models.CharField(max_length=10, choices=PAYMENT_STATUS_CHOICES, default='unpaid')
     reschedule_count = models.PositiveIntegerField(default=0)
-    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='created_appointments')
-    updated_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='updated_appointments')
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='created_appointment')
+    updated_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='updated_appointment')
     created_at = models.DateTimeField(auto_now_add=True)
     is_active = models.BooleanField(default=True)
