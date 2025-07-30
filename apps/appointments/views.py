@@ -16,7 +16,7 @@ def create_appointment(request):
     try:
         data = request.data.copy()
         doctor_id = data.get('doctor')
-        print('userid', request.user.id)
+        
         try:
             doctor = Doctor.objects.get(id=doctor_id)
         except Doctor.DoesNotExist:
@@ -24,24 +24,27 @@ def create_appointment(request):
         
         data['doctor'] = doctor.id
         data['appointment_number'] = f"APT-{uuid.uuid4().hex[:10].upper()}"
-    # here logic 
+        
+        user = request.user
+        
+        if user:
+            role = user.role
+            profile_id = user.profile_id
+            
+            if role == 'patient' and profile_id:
+                data['patient'] = profile_id
+                print('user',profile_id,user.id)
+            elif role in ['doctor', 'admin']:
+                data['created_by'] = user.id
         
         serializer = AppointmentSerializer(data=data)  
         if serializer.is_valid():
             serializer.save()  
             return Response({'message': 'Appointment created successfully!', 'data': serializer.data}, status=status.HTTP_201_CREATED)
-        return Response("serializer.errors", status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     except Exception as e: return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)  
     
-            #      if request.user:
-            # print('user', request.user.role)
-            # data['created_by'] = request.user.id
-            # try:
-            #     patient_instance = Patient.objects.get(user=request.user)
-            #     data['patient'] = patient_instance.id
-            # except Patient.DoesNotExist:
-            #     return Response({'error': 'Patient profile not found.'}, status=404)   
 @api_view(['GET'])
 @custom_auth_gird(allowed_roles=['admin'])
 def getAllappointment(request):

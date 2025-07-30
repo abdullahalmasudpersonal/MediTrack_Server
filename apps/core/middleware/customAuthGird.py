@@ -47,6 +47,9 @@ import jwt
 from django.conf import settings
 from rest_framework import status
 from apps.users.models import User
+from apps.admins.models import Admin
+from apps.doctors.models import Doctor
+from apps.patients.models import Patient
 
 def custom_auth_gird(allowed_roles=None, optional=False):
     if allowed_roles is None:
@@ -71,6 +74,19 @@ def custom_auth_gird(allowed_roles=None, optional=False):
                     return Response({'detail': 'Email not found in token'}, status=status.HTTP_401_UNAUTHORIZED)
                 
                 user = User.objects.get(email=email)
+                try:
+                    if user.role == 'admin':
+                        profile = Admin.objects.get(user=user)
+                    elif user.role == 'doctor':
+                        profile = Doctor.objects.get(user=user)
+                    elif user.role == 'patient':
+                        profile = Patient.objects.get(user=user)
+                    else:
+                        profile = None
+                    if profile:
+                        user.profile_id = profile.id
+                except Exception as e:
+                    user.profile_id = None
 
                 if allowed_roles and user.role not in allowed_roles:
                     return Response({'detail': 'You are not authorized to view this data.'}, status=status.HTTP_403_FORBIDDEN)
