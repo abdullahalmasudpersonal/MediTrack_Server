@@ -25,15 +25,13 @@ def create_appointment(request):
         data['doctor'] = doctor.id
         data['appointment_number'] = f"APT-{uuid.uuid4().hex[:10].upper()}"
         
-        user = request.user
-        
-        if user:
-            role = user.role
-            profile_id = user.profile_id
+        user = getattr(request, 'user', None)
+        if user and hasattr(user, 'id'):
+            role = getattr(user, 'role', None)
+            profile_id = getattr(user, 'profile_id', None)
             
             if role == 'patient' and profile_id:
                 data['patient'] = profile_id
-                print('user',profile_id,user.id)
             elif role in ['doctor', 'admin']:
                 data['created_by'] = user.id
         
