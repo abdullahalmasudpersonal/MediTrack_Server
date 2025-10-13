@@ -39,7 +39,6 @@ class Doctor(models.Model):
     CONSULTATION_TYPE = [
         ('online', 'Online'), 
         ('offline', 'Offline'), 
-        ('video', 'Video Call')
     ]
         
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False) 
@@ -54,7 +53,6 @@ class Doctor(models.Model):
     experience_years = models.PositiveIntegerField(blank=True, null=True )
     hospital_affiliation = models.CharField(max_length=100, blank=True, null=True)
     availability = models.JSONField(blank=True, null=True)  # Example: {"monday": "10am-5pm"}
-    consultation_type = models.CharField(max_length=20, choices=CONSULTATION_TYPE, default='offline')
     fees = models.DecimalField(max_digits=8, decimal_places=2, default=0.0)
     photo = models.URLField(blank=True, null=True)
     bio = models.TextField(blank=True, null=True)

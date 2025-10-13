@@ -14,6 +14,7 @@ from apps.core.middleware.customAuthGird import custom_auth_gird
 from apps.doctors.models import Doctor
 from apps.admins.models import Admin
 from apps.patients.models import Patient
+from apps.utils.response_helper import success_response, error_response
 
 @api_view(['GET'])
 def pinkAllDoctor(request):
@@ -104,7 +105,6 @@ def createDoctor(request):
                 'experience_years':request.data.get('experience_years'),
                 'hospital_affiliation':request.data.get('hospital_affiliation'),
                 'availability':request.data.get('availability'),
-                'consultation_type':request.data.get('consultation_type'),
                 'fees':request.data.get('fees'),
                 'doctor_photo':request.data.get('doctor_photo'),
                 'bio':request.data.get('bio'),
@@ -115,13 +115,19 @@ def createDoctor(request):
             doctor_serializer.is_valid(raise_exception=True)
             doctor_serializer.save(user=user)
             
-        return Response({
-            "doctor": doctor_serializer.data
-        }, status=status.HTTP_201_CREATED)
+        return success_response(
+            message="Doctor created successfully",
+            data=doctor_serializer.data,
+            code=status.HTTP_201_CREATED
+        )
             
     except Exception as e:
-        return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)   
-
+        return error_response(
+            message="Doctor creation failed",
+            error=e,
+            code=status.HTTP_400_BAD_REQUEST              
+        )   
+            
 @api_view(['POST'])
 @custom_auth_gird(allowed_roles=['admin'])
 def createAdmin(request):
