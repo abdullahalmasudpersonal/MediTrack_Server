@@ -2,15 +2,18 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.exceptions import ErrorDetail
 
+
 def serialize_error_detail(error):
     """
-    ✅ Converts DRF ValidationError or ErrorDetail objects into JSON-serializable form.
+    ✅ Converts DRF ValidationError or ErrorDetail objects into JSON-safe form.
     """
-    print(error,'error')
+    
     if isinstance(error, dict):
+        # print('error',error )
         clean = {}
         for key, value in error.items():
             clean[key] = [str(v) if isinstance(v, ErrorDetail) else v for v in value]
+           
         return clean
     elif isinstance(error, list):
         return [str(v) if isinstance(v, ErrorDetail) else v for v in error]

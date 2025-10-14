@@ -124,7 +124,7 @@ def createDoctor(request):
     except Exception as e:
         return error_response(
             message="Doctor creation failed",
-            error=e,
+            error=str(e),
             code=status.HTTP_400_BAD_REQUEST              
         )   
             
