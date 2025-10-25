@@ -64,6 +64,7 @@ def getSingleDoctor(request,pk):
 @api_view(['PATCH'])
 @custom_auth_gird(allowed_roles=['admin'])
 def updateDoctorStatus(request,pk):
+    print(request.data.get,'request'),
     try:
         doctor = Doctor.objects.get(user_id=pk)
         new_status = request.data.get('status')
