@@ -23,6 +23,7 @@ class Schedule(models.Model):
     weekday = models.IntegerField(choices=WEEKDAYS)
     start_time = models.TimeField()
     end_time = models.TimeField()
+    slot_duration = models.IntegerField(default=10) 
     is_active= models.BooleanField(default=True)
 
     # def __str__(self):
