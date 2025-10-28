@@ -53,9 +53,9 @@ def createSchedule(request):
         )
 
 @api_view(['GET'])
-def getDoctorSchedule(request):
+def getDoctorSchedule(request,pk):
     try:
-        doctor_id = request.query_params.get("doctor")
+        doctor_id = pk
 
         if not doctor_id:
             return error_response(
