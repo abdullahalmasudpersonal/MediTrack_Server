@@ -6,6 +6,7 @@ from apps.doctors.models import Doctor
 class Schedule(models.Model):
     class Meta:
         db_table='schedules'
+        unique_together = ('doctor', 'weekday', 'start_time', 'end_time')
 
     WEEKDAYS = [
         (0, 'Monday'),
@@ -24,5 +25,5 @@ class Schedule(models.Model):
     end_time = models.TimeField()
     is_active= models.BooleanField(default=True)
 
-    def __str__(self):
-        return f"{self.doctor.name} - {self.get_weekday_display()} ({self.start_time}-{self.end_time})"
+    # def __str__(self):
+    #     return f"{self.doctor.name} - {self.get_weekday_display()} ({self.start_time}-{self.end_time})"
