@@ -2,7 +2,7 @@ from django.db import models
 import uuid
 from django.core.validators import RegexValidator
 from apps.users.models import User
-
+# from apps.schedules.models import Schedule
 # Create your models here.
 class Doctor(models.Model):
     class Meta:
@@ -58,3 +58,9 @@ class Doctor(models.Model):
     bio = models.TextField(blank=True, null=True)
     address = models.CharField(max_length=50,blank=True, null=True)
     updated_at = models.DateTimeField(auto_now=True) 
+
+
+# def has_schedule_on(self, date):
+#     weekday = date.weekday()
+#     return Schedule.objects.filter(doctor=self, weekday=weekday, is_active=True).exists()
+
