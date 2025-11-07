@@ -13,8 +13,8 @@ def getAllDoctor(request):
       specialization  = request.GET.get('specialization')
       name = request.GET.get('name')
       filters = {
-        #  'user__status': 'active',
-        #  'user__is_deleted': False,
+         'user__status': 'active',
+         'user__is_deleted': False,
       }
       if specialization:
          filters['specialization__icontains'] = specialization
@@ -25,6 +25,33 @@ def getAllDoctor(request):
       doctors = Doctor.objects.filter(**filters)  
     #   doctors = Doctor.objects.filter(user__status='active',user__is_deleted=False) 
     #   doctors = Doctor.objects.filter() 
+      serializer = DoctorSerializer(doctors, many=True)
+      return success_response(
+         message="Get all doctor successfully",
+         data=serializer.data, 
+         code=status.HTTP_200_OK
+         )  
+   except Exception as e:
+        return error_response(
+            message="Failed get all doctor.",
+            error=str(e),
+            code=status.HTTP_400_BAD_REQUEST              
+        )       
+
+@api_view(['GET'])
+def getAllDoctorForAdmin(request):
+   try:
+      specialization  = request.GET.get('specialization')
+      name = request.GET.get('name')
+
+      filters = {}
+      if specialization:
+         filters['specialization__icontains'] = specialization
+
+      if name:
+         filters['name__icontains'] = name 
+      
+      doctors = Doctor.objects.filter(**filters)  
       serializer = DoctorSerializer(doctors, many=True)
       return success_response(
          message="Get all doctor successfully",
