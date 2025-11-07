@@ -39,6 +39,7 @@ def getAllDoctor(request):
         )       
 
 @api_view(['GET'])
+@custom_auth_gird(allowed_roles=['admin'])
 def getAllDoctorForAdmin(request):
    try:
       specialization  = request.GET.get('specialization')
@@ -69,6 +70,30 @@ def getAllDoctorForAdmin(request):
 def getSingleDoctor(request,pk):
     try:
         doctors = Doctor.objects.get(user_id=pk,user__status='active',user__is_deleted=False)
+        serializer = DoctorSerializer(doctors)
+        return success_response(
+            message="Single doctor fetched successfully",
+            data=serializer.data,
+            code=status.HTTP_200_OK
+        )
+    except Doctor.DoesNotExist:
+        return error_response(
+            message="Doctor not found.",
+            error="No doctor exists with this ID.",
+            code=status.HTTP_404_NOT_FOUND
+        ) 
+    except Exception as e:   
+        return error_response(
+            message="Failed to fetch single doctor.",
+            error=str(e),
+            code=status.HTTP_400_BAD_REQUEST
+        )
+    
+@api_view(['GET'])
+@custom_auth_gird(allowed_roles=['admin'])
+def getSingleDoctorForAdmin(request,pk):
+    try:
+        doctors = Doctor.objects.get(user_id=pk)
         serializer = DoctorSerializer(doctors)
         return success_response(
             message="Single doctor fetched successfully",
