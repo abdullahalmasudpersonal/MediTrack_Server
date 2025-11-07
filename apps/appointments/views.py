@@ -114,20 +114,53 @@ def create_appointment(request):
             error=str(e),
             code=status.HTTP_500_INTERNAL_SERVER_ERROR
         )
+
     
 @api_view(['GET'])
-@custom_auth_gird(allowed_roles=['admin'])
-def getAllappointment(request):
-    try:
-        appointments = Appointment.objects.all().order_by('-created_at')
-        serializer = AppointmentSerializer(appointments, many=True)
-        return Response( serializer.data, status=status.HTTP_200_OK)
-    except Exception as e:
-        return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+@custom_auth_gird(allowed_roles=['patient','doctor', 'admin'])
+def getAllAppointment(request):
+    role = request.user.role
+    email = request.user.email
 
-@api_view(['GET'])
-@custom_auth_gird(allowed_roles=['admin'])
-def getSingleAppointment(request,pk):
+    try:
+        if role == 'patient':
+            appointment = Appointment.objects.filter(email=email)
+        elif role == 'doctor':
+            appointment = Appointment.objects.filter(email=email)  
+        elif role == 'admin':
+            appointment = Appointment.objects.all()  
+        else:
+            return error_response(message="Your No Appointment", error=str(e), code=500)
+
+        # If no appointments found
+        if not appointment.exists():
+            return error_response(message="No appointments found", code=404)
+        
+        # Serialize the appointments
+        serializer = AppointmentSerializer(appointment, many=True)
+
+        return success_response(
+            message="Available slots fetched successfully",
+            data=serializer.data,
+            code=200
+        )
+    except Exception as e:
+        return error_response(message="Failed to fetch appointment", error=str(e), code=500)
+
+
+# @api_view(['GET'])
+# @custom_auth_gird(allowed_roles=['admin'])
+# def getAllappointment(request):
+#     try:
+#         appointments = Appointment.objects.all().order_by('-created_at')
+#         serializer = AppointmentSerializer(appointments, many=True)
+#         return Response( serializer.data, status=status.HTTP_200_OK)
+#     except Exception as e:
+#         return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+# @api_view(['GET'])
+# @custom_auth_gird(allowed_roles=['admin'])
+# def getSingleAppointment(request,pk):
     try:
         appointment = Appointment.objects.get(id=pk)
         serializer = AppointmentSerializer(appointment)
