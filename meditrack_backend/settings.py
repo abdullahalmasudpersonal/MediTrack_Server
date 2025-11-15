@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'apps.schedules',
     'apps.appointments',
     'apps.custom_auth',
+    'meditrack_backend', 
 ]
 
 REST_FRAMEWORK = {
