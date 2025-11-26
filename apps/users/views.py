@@ -16,11 +16,11 @@ from apps.admins.models import Admin
 from apps.patients.models import Patient
 from apps.utils.response_helper import success_response, error_response
 
-@api_view(['GET'])
-def pinkAllDoctor(request):
-    users = Doctor.objects.filter()
-    serializer = DoctorSerializer(users, many=True)
-    return Response(serializer.data)
+# @api_view(['GET'])
+# def pinkAllDoctor(request):
+#     users = Doctor.objects.filter()
+#     serializer = DoctorSerializer(users, many=True)
+#     return Response(serializer.data)
 
 # Create your views here.
 @api_view(['GET'])

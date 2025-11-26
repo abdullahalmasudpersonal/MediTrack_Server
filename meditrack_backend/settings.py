@@ -45,6 +45,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
     'corsheaders',
+    'cloudinary',
+    'cloudinary_storage',
     
     'apps.users',
     'apps.admins',
@@ -56,6 +58,14 @@ INSTALLED_APPS = [
     'apps.custom_auth',
     'meditrack_backend', 
 ]
+
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': 'dz8zvssyi',
+    'API_KEY': '912816429312442',
+    'API_SECRET': 'EC85SNNUGEngXDltbnJj0LPWx68',
+}
+
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
