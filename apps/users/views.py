@@ -15,6 +15,8 @@ from apps.doctors.models import Doctor
 from apps.admins.models import Admin
 from apps.patients.models import Patient
 from apps.utils.response_helper import success_response, error_response
+import cloudinary
+import cloudinary.uploader
 
 # @api_view(['GET'])
 # def pinkAllDoctor(request):
@@ -201,15 +203,29 @@ def updateMyProfileData(request):
     try:
         if role == 'admin':
             profile = Admin.objects.get(user=request.user)
-            serializer = AdminSerializer(profile, data=request.data, partial=True)
+            # serializer = AdminSerializer(profile, data=request.data, partial=True)
+            serializer_class = AdminSerializer
+
         elif role == 'doctor':
             profile = Doctor.objects.get(user=request.user)
-            serializer = DoctorSerializer(profile, data=request.data, partial=True)
+            # serializer = DoctorSerializer(profile, data=request.data, partial=True)
+            serializer_class = DoctorSerializer
+            
         elif role == 'patient':
             profile = Patient.objects.get(user=request.user)
-            serializer = PatientSerializer(profile, data=request.data, partial=True)
+            # serializer = PatientSerializer(profile, data=request.data, partial=True)
+            serializer_class = PatientSerializer
+            
         else:
             return Response({'detail': 'Invalid role'}, status=400)
+        
+        data = request.data.copy()
+        print(data,'data')
+        # if "image" in request.FILES:
+        #     upload_result = cloudinary.uploader.upload(request.FILES["image"])
+        #     data["image"] = upload_result.get("secure_url")  # শুধু URL save হবে
+
+        serializer = serializer_class(profile, data=data, partial=True)
         
         if serializer.is_valid():
             serializer.save()
