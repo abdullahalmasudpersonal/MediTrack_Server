@@ -17,6 +17,7 @@ from apps.patients.models import Patient
 from apps.utils.response_helper import success_response, error_response
 import cloudinary
 import cloudinary.uploader
+import json
 
 # @api_view(['GET'])
 # def pinkAllDoctor(request):
@@ -220,10 +221,19 @@ def updateMyProfileData(request):
             return Response({'detail': 'Invalid role'}, status=400)
         
         data = request.data.copy()
-        print(data,'data')
+        if "data" in data:
+            try:
+                json_data = json.loads(data["data"])
+                data.update(json_data)
+            except:
+                pass
+
         # if "image" in request.FILES:
         #     upload_result = cloudinary.uploader.upload(request.FILES["image"])
         #     data["image"] = upload_result.get("secure_url")  # শুধু URL save হবে
+        if "image" in request.FILES:
+            data["image"] = request.FILES["image"]
+
 
         serializer = serializer_class(profile, data=data, partial=True)
         
