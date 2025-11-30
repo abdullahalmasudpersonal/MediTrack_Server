@@ -18,6 +18,7 @@ from apps.utils.response_helper import success_response, error_response
 import cloudinary
 import cloudinary.uploader
 import json
+from cloudinary import config
 
 # @api_view(['GET'])
 # def pinkAllDoctor(request):
@@ -200,6 +201,10 @@ def getMyProfileData(request):
 def updateMyProfileData(request):
     role = request.user.role
     email = request.user.email
+
+
+    print(config().api_key,'resss')
+
     
     try:
         if role == 'admin':
